@@ -3,9 +3,9 @@ import { hash, compare } from "bcryptjs";
 import { cookies } from "next/headers";
 import { supabaseAdmin } from "./supabase";
 
-const JWT_SECRET = new TextEncoder().encode(
-  process.env.JWT_SECRET || "default-secret-change-in-production"
-);
+const raw = process.env.JWT_SECRET;
+if (!raw) throw new Error("JWT_SECRET is required");
+const JWT_SECRET = new TextEncoder().encode(raw);
 const TOKEN_NAME = "wakja_token";
 const TOKEN_EXPIRY = "7d"; // 7일
 
@@ -106,7 +106,7 @@ export async function isEmailExists(email: string): Promise<boolean> {
     .from("users")
     .select("id")
     .eq("email", email)
-    .single();
+    .maybeSingle();
   return !!data;
 }
 
