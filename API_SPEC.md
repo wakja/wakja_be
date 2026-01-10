@@ -5,18 +5,20 @@
 ## 공통 사항
 
 ### 요청 헤더
+
 ```
 Content-Type: application/json
 ```
 
 ### 인증
+
 - 쿠키 기반 JWT 인증 사용
 - 프론트엔드에서 `credentials: 'include'` 필수
 
 ```typescript
 // fetch 사용 시
-fetch('/api/posts', {
-  credentials: 'include',
+fetch("/api/posts", {
+  credentials: "include",
 });
 
 // axios 사용 시
@@ -26,6 +28,7 @@ axios.defaults.withCredentials = true;
 ### 응답 형식
 
 **성공**
+
 ```json
 {
   "success": true,
@@ -34,6 +37,7 @@ axios.defaults.withCredentials = true;
 ```
 
 **실패**
+
 ```json
 {
   "success": false,
@@ -46,11 +50,13 @@ axios.defaults.withCredentials = true;
 ## 1. 인증 API
 
 ### 1.1 회원가입
+
 ```
 POST /api/auth/signup
 ```
 
 **Request Body**
+
 ```json
 {
   "email": "user@example.com",
@@ -59,13 +65,14 @@ POST /api/auth/signup
 }
 ```
 
-| 필드 | 타입 | 필수 | 설명 |
-|------|------|------|------|
-| email | string | O | 이메일 (형식 검증) |
-| password | string | O | 비밀번호 (8자 이상, 영문+숫자) |
-| nickname | string | O | 닉네임 (2~12자, 한글/영문/숫자) |
+| 필드     | 타입   | 필수 | 설명                            |
+| -------- | ------ | ---- | ------------------------------- |
+| email    | string | O    | 이메일 (형식 검증)              |
+| password | string | O    | 비밀번호 (8자 이상, 영문+숫자)  |
+| nickname | string | O    | 닉네임 (2~12자, 한글/영문/숫자) |
 
 **Response (201)**
+
 ```json
 {
   "success": true,
@@ -90,11 +97,13 @@ POST /api/auth/signup
 ---
 
 ### 1.2 로그인
+
 ```
 POST /api/auth/login
 ```
 
 **Request Body**
+
 ```json
 {
   "email": "user@example.com",
@@ -103,6 +112,7 @@ POST /api/auth/login
 ```
 
 **Response (200)**
+
 ```json
 {
   "success": true,
@@ -123,11 +133,13 @@ POST /api/auth/login
 ---
 
 ### 1.3 로그아웃
+
 ```
 POST /api/auth/logout
 ```
 
 **Response (200)**
+
 ```json
 {
   "success": true,
@@ -138,11 +150,13 @@ POST /api/auth/logout
 ---
 
 ### 1.4 현재 사용자 정보
+
 ```
 GET /api/auth/me
 ```
 
 **Response (200)**
+
 ```json
 {
   "success": true,
@@ -164,6 +178,7 @@ GET /api/auth/me
 ## 2. 게시글 API
 
 ### 2.1 게시글 목록 조회
+
 ```
 GET /api/posts
 ```
@@ -176,11 +191,13 @@ GET /api/posts
 | search | string | "" | 검색어 (제목+본문) |
 
 **예시**
+
 ```
 GET /api/posts?page=1&per_page=20&search=안녕
 ```
 
 **Response (200)**
+
 ```json
 {
   "success": true,
@@ -207,11 +224,13 @@ GET /api/posts?page=1&per_page=20&search=안녕
 ---
 
 ### 2.2 게시글 상세 조회
+
 ```
 GET /api/posts/:id
 ```
 
 **Response (200)**
+
 ```json
 {
   "success": true,
@@ -230,11 +249,11 @@ GET /api/posts/:id
 }
 ```
 
-| 필드 | 설명 |
-|------|------|
+| 필드       | 설명                              |
+| ---------- | --------------------------------- |
 | content_md | 마크다운 원문 (프론트에서 렌더링) |
-| is_owner | 현재 사용자가 작성자인지 여부 |
-| has_liked | 현재 사용자가 좋아요 했는지 여부 |
+| is_owner   | 현재 사용자가 작성자인지 여부     |
+| has_liked  | 현재 사용자가 좋아요 했는지 여부  |
 
 **Errors**
 | 상태 | 메시지 |
@@ -245,12 +264,15 @@ GET /api/posts/:id
 ---
 
 ### 2.3 게시글 작성
+
 ```
 POST /api/posts
 ```
+
 > 인증 필요
 
 **Request Body**
+
 ```json
 {
   "title": "제목 (선택)",
@@ -258,12 +280,13 @@ POST /api/posts
 }
 ```
 
-| 필드 | 타입 | 필수 | 설명 |
-|------|------|------|------|
-| title | string | X | 제목 (최대 200자) |
-| content_md | string | O | 본문 (마크다운) |
+| 필드       | 타입   | 필수 | 설명              |
+| ---------- | ------ | ---- | ----------------- |
+| title      | string | X    | 제목 (최대 200자) |
+| content_md | string | O    | 본문 (마크다운)   |
 
 **Response (200)**
+
 ```json
 {
   "success": true,
@@ -286,12 +309,15 @@ POST /api/posts
 ---
 
 ### 2.4 게시글 수정
+
 ```
 PUT /api/posts/:id
 ```
+
 > 인증 필요, 작성자만 가능
 
 **Request Body**
+
 ```json
 {
   "title": "수정된 제목",
@@ -300,6 +326,7 @@ PUT /api/posts/:id
 ```
 
 **Response (200)**
+
 ```json
 {
   "success": true,
@@ -322,12 +349,15 @@ PUT /api/posts/:id
 ---
 
 ### 2.5 게시글 삭제
+
 ```
 DELETE /api/posts/:id
 ```
+
 > 인증 필요, 작성자만 가능
 
 **Response (200)**
+
 ```json
 {
   "success": true,
@@ -345,12 +375,15 @@ DELETE /api/posts/:id
 ---
 
 ### 2.6 좋아요 (지껄) 토글
+
 ```
 POST /api/posts/:id/like
 ```
+
 > 비로그인도 가능 (쿠키 기반 식별)
 
 **Response (200)**
+
 ```json
 {
   "success": true,
@@ -361,21 +394,23 @@ POST /api/posts/:id/like
 }
 ```
 
-| 필드 | 설명 |
-|------|------|
-| liked | true면 좋아요 추가, false면 좋아요 취소 |
-| like_count | 현재 총 좋아요 수 |
+| 필드       | 설명                                    |
+| ---------- | --------------------------------------- |
+| liked      | true면 좋아요 추가, false면 좋아요 취소 |
+| like_count | 현재 총 좋아요 수                       |
 
 ---
 
 ## 3. 댓글 API
 
 ### 3.1 댓글 목록 조회
+
 ```
 GET /api/posts/:id/comments
 ```
 
 **Response (200)**
+
 ```json
 {
   "success": true,
@@ -401,23 +436,27 @@ GET /api/posts/:id/comments
 ---
 
 ### 3.2 댓글 작성
+
 ```
 POST /api/posts/:id/comments
 ```
+
 > 인증 필요
 
 **Request Body**
+
 ```json
 {
   "content": "댓글 내용입니다."
 }
 ```
 
-| 필드 | 타입 | 필수 | 설명 |
-|------|------|------|------|
-| content | string | O | 댓글 내용 (최대 1000자) |
+| 필드    | 타입   | 필수 | 설명                    |
+| ------- | ------ | ---- | ----------------------- |
+| content | string | O    | 댓글 내용 (최대 1000자) |
 
 **Response (200)**
+
 ```json
 {
   "success": true,
@@ -442,12 +481,15 @@ POST /api/posts/:id/comments
 ---
 
 ### 3.3 댓글 수정
+
 ```
 PUT /api/comments/:id
 ```
+
 > 인증 필요, 작성자만 가능
 
 **Request Body**
+
 ```json
 {
   "content": "수정된 댓글"
@@ -455,6 +497,7 @@ PUT /api/comments/:id
 ```
 
 **Response (200)**
+
 ```json
 {
   "success": true,
@@ -476,12 +519,15 @@ PUT /api/comments/:id
 ---
 
 ### 3.4 댓글 삭제
+
 ```
 DELETE /api/comments/:id
 ```
+
 > 인증 필요, 작성자만 가능
 
 **Response (200)**
+
 ```json
 {
   "success": true,
@@ -494,34 +540,39 @@ DELETE /api/comments/:id
 ## 4. 이미지 업로드 API
 
 ### 4.1 이미지 업로드
+
 ```
 POST /api/upload
 ```
+
 > 인증 필요
 
 **Request**
+
 - Content-Type: `multipart/form-data`
 
-| 필드 | 타입 | 필수 | 설명 |
-|------|------|------|------|
-| file | File | O | 이미지 파일 |
+| 필드 | 타입 | 필수 | 설명        |
+| ---- | ---- | ---- | ----------- |
+| file | File | O    | 이미지 파일 |
 
 **허용 형식**: jpg, png, gif, webp
 **최대 크기**: 5MB
 
 **예시 (JavaScript)**
+
 ```javascript
 const formData = new FormData();
-formData.append('file', file);
+formData.append("file", file);
 
-const response = await fetch('/api/upload', {
-  method: 'POST',
-  credentials: 'include',
+const response = await fetch("/api/upload", {
+  method: "POST",
+  credentials: "include",
   body: formData,
 });
 ```
 
 **Response (200)**
+
 ```json
 {
   "success": true,
@@ -541,6 +592,7 @@ const response = await fetch('/api/upload', {
 | 401 | 로그인이 필요합니다 |
 
 **마크다운 삽입 예시**
+
 ```javascript
 const imageUrl = response.data.url;
 const markdown = `![](${imageUrl})`;
@@ -552,12 +604,15 @@ const markdown = `![](${imageUrl})`;
 ## 5. 피드백 API
 
 ### 5.1 피드백 제출
+
 ```
 POST /api/feedback
 ```
+
 > 비로그인도 가능
 
 **Request Body**
+
 ```json
 {
   "type": "bug",
@@ -565,12 +620,13 @@ POST /api/feedback
 }
 ```
 
-| 필드 | 타입 | 필수 | 설명 |
-|------|------|------|------|
-| type | string | O | 유형: `bug`, `suggestion`, `other` |
-| content | string | O | 내용 (최대 2000자) |
+| 필드    | 타입   | 필수 | 설명                               |
+| ------- | ------ | ---- | ---------------------------------- |
+| type    | string | O    | 유형: `bug`, `suggestion`, `other` |
+| content | string | O    | 내용 (최대 2000자)                 |
 
 **Response (200)**
+
 ```json
 {
   "success": true,
@@ -593,16 +649,16 @@ POST /api/feedback
 
 ```typescript
 // lib/api.ts
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
 
 export async function api<T>(
   endpoint: string,
   options?: RequestInit
 ): Promise<{ success: boolean; data?: T; error?: string }> {
   const response = await fetch(`${API_BASE}${endpoint}`, {
-    credentials: 'include',
+    credentials: "include",
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
       ...options?.headers,
     },
     ...options,
@@ -612,15 +668,15 @@ export async function api<T>(
 }
 
 // 사용 예시
-const { data, error } = await api<Post>('/api/posts/1');
+const { data, error } = await api<Post>("/api/posts/1");
 ```
 
 ### 인증 상태 관리
 
 ```typescript
 // hooks/useAuth.ts
-import { useEffect, useState } from 'react';
-import { api } from '@/lib/api';
+import { useEffect, useState } from "react";
+import { api } from "@/lib/api";
 
 interface User {
   id: string;
@@ -633,16 +689,16 @@ export function useAuth() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    api<User>('/api/auth/me')
-      .then(res => {
+    api<User>("/api/auth/me")
+      .then((res) => {
         if (res.success) setUser(res.data!);
       })
       .finally(() => setLoading(false));
   }, []);
 
   const login = async (email: string, password: string) => {
-    const res = await api<User>('/api/auth/login', {
-      method: 'POST',
+    const res = await api<User>("/api/auth/login", {
+      method: "POST",
       body: JSON.stringify({ email, password }),
     });
     if (res.success) setUser(res.data!);
@@ -650,7 +706,7 @@ export function useAuth() {
   };
 
   const logout = async () => {
-    await api('/api/auth/logout', { method: 'POST' });
+    await api("/api/auth/logout", { method: "POST" });
     setUser(null);
   };
 
@@ -663,14 +719,17 @@ export function useAuth() {
 ## 특이사항
 
 ### 조회수 증가 로직
+
 - 같은 사용자(쿠키 기반)가 같은 글을 다시 열면:
   - 마지막 조회 후 **6시간 이내**: 조회수 증가 안 함
   - **6시간 초과**: 조회수 +1
 
 ### 좋아요 제한
+
 - 세션/쿠키 기준 1인 1회 제한
 - 같은 글에 다시 클릭하면 좋아요 취소 (토글)
 
 ### 이미지 업로드
+
 - 게시글당 최대 2개 제한은 **프론트엔드에서 처리**
 - 백엔드는 개별 파일 업로드만 담당
