@@ -47,8 +47,8 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // 쿠키 설정
-    await setAuthCookie({
+    // 쿠키 설정 및 토큰 생성
+    const token = await setAuthCookie({
       userId: user.id,
       email: user.email,
       nickname: user.nickname,
@@ -60,6 +60,7 @@ export async function POST(request: NextRequest) {
         id: user.id,
         email: user.email,
         nickname: user.nickname,
+        token,
       },
     });
   } catch (error) {

@@ -1,9 +1,21 @@
-import { NextResponse } from "next/server";
-import { getCurrentUser } from "@/lib/auth";
+import { NextRequest, NextResponse } from "next/server";
+import { getCurrentUser, verifyToken } from "@/lib/auth";
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
-    const user = await getCurrentUser();
+    // Authorization 헤더에서 토큰 확인
+    const authHeader = request.headers.get("Authorization");
+    let user = null;
+
+    if (authHeader?.startsWith("Bearer ")) {
+      const token = authHeader.slice(7);
+      user = await verifyToken(token);
+    }
+
+    // 헤더에 토큰이 없으면 쿠키에서 확인
+    if (!user) {
+      user = await getCurrentUser();
+    }
 
     if (!user) {
       return NextResponse.json(
